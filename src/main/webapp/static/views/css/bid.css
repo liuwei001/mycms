@@ -1,0 +1,71 @@
+/*左侧 招标公告*/
+.ant {width:800px; float:left;}
+.ant .antTil {height:45px; line-height:45px; padding:0 30px; border:1px solid #e6e6e6; border-bottom:none; font-size:18px; font-weight:bold; color:#149717;}
+.ant .antTheme {height:50px; line-height:50px; padding:0 30px; font-size:16px; color:#505050; border:1px solid #e6e6e6; border-top:2px solid #149717; background:#f2f2f2;}
+.ant .antTheme dt {float:left;}
+.ant .antTheme dd {float:right;}
+.ant .antCont {border:1px solid #e6e6e6; border-top:none;}
+.ant .antItems {border-top:1px solid #e6e6e6; padding:24px 30px;}
+.ant .antItems:first-child {border-top:none;}
+.ant .antItems:hover {background:#f3fbfb;}
+.ant .antItems .antItemsTil {width:560px; height:38px; line-height:38px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.ant .antItems .antItemsTil a {font-size:14px; font-weight:bold; color:#505050;}
+.ant .antItems .antItemsTil a:hover {color:#ef4f1d;}
+.ant .antItems dl {color:#505050;}
+.ant .antItems dl dt {float:left; width:560px;}
+.ant .antItems dl dd {float:right;}
+
+/*右侧*/
+.antrg {width:380px; float:right;}
+/*招标预告筛选*/
+.screen {border:1px solid #e6e6e6;}
+.screen .screenTil {height:40px; line-height:40px; background:#f2f2f2; padding:0 19px; font-size:16px; color:#505050; border-bottom:1px solid #e6e6e6;}
+.screen .screenTab {width:43px; float:left; line-height:18px; font-size:16px; text-align:center;}
+.screen .screenTab li {padding:40px 0; height:54px; border-right:1px solid #e6e6e6; border-top:1px solid #e6e6e6; background:#f2f2f2; cursor:pointer;}
+.screen .screenTab li:first-child {border-top:none;}
+.screen .screenTab li.act {background:#fff; border-right:none; color:#ef4f1d; font-weight:bold;}
+.screen .screenCont {width:330px; height:269px; float:right; overflow:hidden;}
+.screen .screenCont .screenItem {margin-top:15px; font-size:14px; display:none;}
+.screen .screenCont .screenItem:first-child {display:block;}
+.screen .screenCont .screenItem .screenDl {padding:4px 15px;}
+.screen .screenCont .screenItem .screenDl dt {width:45px; float:left; font-weight:bold; text-align:center;}
+.screen .screenCont .screenItem .screenDl dd {width:255px; float:right;}
+.screen .screenCont .screenItem .screenDl dd div {float:left; margin:0 8px; white-space:nowrap;}
+.screen .screenCont .screenItem .screenUl {padding:0 15px;}
+.screen .screenCont .screenItem .screenUl li {float:left; margin:4px 8px; white-space:nowrap;}
+.screen .screenCont .screenItem a:hover{ color:#149717;}
+.screen .screenCont .screenItem a.act { color:#fff;  background:#149717; }
+/*最新招标公告 & 热门资讯*/
+.newAnt {border:1px solid #e6e6e6; margin-top:20px;}
+.newAnt .newAntTil {height:38px; line-height:38px; padding:0 19px; font-size:16px; color:#505050;}
+.newAnt .newAntList {border-top:2px solid #149717; padding:15px 19px;}
+.newAnt .newAntList li {height:26px; line-height:26px; font-size:14px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+/*广告位*/
+.antAdv {margin-top:20px;}
+
+/*公告详细页*/
+.antBox {width:798px; min-height:550px; float:left; border:1px solid #e6e6e6; padding-bottom:50px;}
+.antDetailsTil {border-bottom:1px solid #e6e6e6; padding:20px 0;}
+.antDetailsTil dt h2 {font-size:18px; color:#1e1e1e; line-height:30px; text-align:center;}
+.antDetailsTil dd {margin-top:8px; text-align:center;}
+.antDetailsTil dd .bigText{font-size: 16px; cursor: pointer; padding-left: 5px;}
+.antDetailsTil dd .littleText{ cursor: pointer;}
+.antDetailsTil dd .noAct{color: #149717;}
+.antDetailsDesc {padding:20px 30px; border-bottom:1px solid #e6e6e6;}
+.antDetailsDesc .antDetailsItems {width:369px; line-height:22px; float:left; color:#1e1e1e; font-size:14px;}
+.antDetailsDesc .antDetailsItems dt {float:left; font-weight:bold;}
+.antDetailsDesc .antDetailsItems dd {float:left;}
+.antDetails {padding:30px 30px 0 30px; font-size:14px; line-height:24px;}
+.antDetails .antDetails_row_1 {color:#1e1e1e; font-weight:bold;}
+.antDetails .antDetails_row_2 {margin-top:20px;  font-family:'SimSun',"microsoft yahei",'tahoma','MS Gothic';color:#222; text-align:justify; text-justify:inter-ideograph;}
+.antDetails .antDetails_row_3 {color:#1e1e1e; font-weight:bold; margin-top:60px;}
+.antDetails .antDetails_row_4 {color:#1e1e1e; font-weight:bold; margin-top:20px;}
+.antDetails .antDetails_row_5 {margin-top:35px;}
+.antDetails .antDetails_row_6 {margin-top:20px;}
+.antDetailsFoot {margin-top:270px; padding:0 30px; font-size:14px; color:#505050;}
+.antDetailsFoot .antDetailsTag {float:left;}
+.antDetailsFoot .antDetailsTag dt {float:left;}
+.antDetailsFoot .antDetailsTag dd {float:left; width:430px;}
+.antDetailsFoot .antDetailsTag dd div {float:left; white-space:nowrap; margin:0px 5px 8px 5px;}
+.antDetailsFoot .antDetailsTag dd div a {display:block; height:22px; line-height:22px; padding:0 12px; border:1px solid #e6e6e6; color:#505050;}
+.antDetailsFoot .antDetailsShare {float:right; line-height:28px; *width:200px;}
