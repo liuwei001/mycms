@@ -2,13 +2,13 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:javaee="http://java.sun.com/xml/ns/javaee"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-<display-name>qrecomm</display-name>
+<display-name>klhtCMS</display-name>
   <context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath*:/spring-context*.xml</param-value>
   </context-param>
   <listener>
-    <listener-class>com.qr.ecomm.modules.sys.listener.WebContextListener</listener-class>
+    <listener-class>com.klht.modules.sys.listener.WebContextListener</listener-class>
   </listener>
   <listener>
     <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
@@ -80,7 +80,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
   </servlet-mapping>
   <servlet>
     <servlet-name>CKFinderConnectorServlet</servlet-name>
-    <servlet-class>com.qr.ecomm.common.web.CKFinderConnectorServlet</servlet-class>
+    <servlet-class>com.klht.common.web.CKFinderConnectorServlet</servlet-class>
     <init-param>
       <param-name>XMLConfig</param-name>
       <param-value>/WEB-INF/ckfinder.xml</param-value>
@@ -91,7 +91,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
     </init-param>
     <init-param>
       <param-name>configuration</param-name>
-      <param-value>com.qr.ecomm.common.web.CKFinderConfig</param-value>
+      <param-value>com.klht.common.web.CKFinderConfig</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -117,7 +117,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
   </filter-mapping>
   <servlet>
     <servlet-name>UserfilesDownloadServlet</servlet-name>
-    <servlet-class>com.qr.ecomm.common.servlet.UserfilesDownloadServlet</servlet-class>
+    <servlet-class>com.klht.common.servlet.UserfilesDownloadServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>UserfilesDownloadServlet</servlet-name>
@@ -125,7 +125,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
   </servlet-mapping>
   <servlet>
     <servlet-name>ValidateCodeServlet</servlet-name>
-    <servlet-class>com.qr.ecomm.common.servlet.ValidateCodeServlet</servlet-class>
+    <servlet-class>com.klht.common.servlet.ValidateCodeServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>ValidateCodeServlet</servlet-name>

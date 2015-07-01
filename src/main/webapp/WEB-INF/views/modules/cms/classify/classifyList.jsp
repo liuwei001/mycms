@@ -29,13 +29,13 @@
 		<li class="active"><a href="${ctx}/cms/classify/list?type=${type}">${rootName}分类列表</a></li>
 		<shiro:hasPermission name="cms:classify:edit"><li><a href="${ctx}/cms/classify/form?type=${type}">${rootName}分类添加</a></li></shiro:hasPermission>
 	</ul>
-	<form:form id="searchForm" modelAttribute="classify" action="${ctx}/cms/classify/list" method="post" class="breadcrumb form-search">
+	<%-- <form:form id="searchForm" modelAttribute="classify" action="${ctx}/cms/classify/list" method="post" class="breadcrumb form-search">
 			<label>分类类型：</label>
 			<form:select path="type" class="input-small">
 				<form:options items="${fns:getDictList('cms_classify_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 			</form:select>
 			<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>&nbsp;&nbsp;
-	</form:form>
+	</form:form> --%>
 	<sys:message content="${message}"/>
 	<form id="listForm" method="post">
 		<table id="treeTable" class="table table-striped table-bordered table-condensed">

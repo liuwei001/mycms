@@ -41,12 +41,12 @@
 	
 	<!-- 类型别名 -->
 	<typeAliases>
-		<typeAlias alias="Page" type="com.qr.ecomm.common.persistence.Page" /><!--分页  -->
+		<typeAlias alias="Page" type="com.klht.common.persistence.Page" /><!--分页  -->
 	</typeAliases>
 	
 	<!-- 插件配置 -->
 	<plugins>
-		<plugin interceptor="com.qr.ecomm.common.persistence.interceptor.PaginationInterceptor" />
+		<plugin interceptor="com.klht.common.persistence.interceptor.PaginationInterceptor" />
     </plugins>
 	
 </configuration>

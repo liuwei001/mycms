@@ -50,11 +50,12 @@
 				},
 				submitHandler: function(form){
 					if($("#parentId").val() == ""){
-						top.$.jBox.tip('请选择上级分类','warning');
-					}else{
-						loading('正在提交，请稍等...');
-						form.submit();
+						$("#parentId").val("0");
 					}
+					
+					loading('正在提交，请稍等...');
+					form.submit();
+					
 				},
 				errorContainer: "#messageBox",
 				errorPlacement: function(error, element) {

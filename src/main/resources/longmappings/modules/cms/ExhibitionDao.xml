@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.klht.modules.cms.dao.ExhibitionDao">
+    
+	<sql id="allColumns">
+        ID,
+        CREATE_BY AS "createBy.id",
+        CREATE_DATE, 
+        UPDATE_BY AS "updateBy.id",
+        UPDATE_DATE,
+        DEL_FLAG,
+        CHANNEL_ID,TITLE,START_DATE,END_DATE,EXHIBITION_IMG,PAVILION_NAME,PROVINCE_ID,CITY_ID,ADDRESS,COUNTRY_ID,
+        DESCRIPTION,HOST_COMPANY,OFFICIAL,HOLD_COMPANY,CONTACT,CONTACT_PHONE,OFFICE_PHONE,MAILBOX,FAX,
+        QQ,CONTACT_ADDRESS,STATUS,TYPE,RELEASE_DATE
+    </sql>
+	
+	<!-- 根据编号获得用户 -->
+	<select id="get" resultType="exhibition">
+		SELECT
+			<include refid="allColumns"/>,
+			(select name from sys_area t2 where t1.city_id = t2.code) as cityName,
+			(select name from sys_area t3 where t1.country_id = t3.code) as countryName
+		FROM CMS_TB_EXHIBITION t1
+		WHERE id = #{id}
+	</select>
+	
+    
+	<select id="findList" resultType="exhibition" parameterType="exhibition">
+		SELECT 
+			<include refid="allColumns"/>
+		FROM CMS_TB_EXHIBITION t1
+	  	WHERE del_flag = #{DEL_FLAG_NORMAL}
+	  		<if test="type != null">
+		  		AND TYPE = #{type}
+			</if>
+			<if test="channelId != null and channelId != ''">
+		  		AND ( CHANNEL_ID = #{channelId} or 
+		  				CHANNEL_ID in(select Id from CMS_TB_CLASSIFY t2 start with ID = #{channelId} connect by prior id = PARENT_ID)
+		  			)
+			</if>
+		  	<if test="title != null and title != ''">
+		  		AND TITLE LIKE 
+		  		<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{title}, '%')</if>
+			</if>
+			<if test="status != null and status != -1">
+		  		AND STATUS = #{status}
+			</if>
+			<if test="beginDate != null and beginDate != ''">
+				AND START_DATE <![CDATA[ >= #{beginDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND END_DATE <![CDATA[ <= #{endDate} ]]>
+			</if>
+		ORDER BY decode(t1.status,1,1,4,2,2,3,3,4,5,5),t1.update_date DESC, t1.id DESC
+	</select>
+	<select id="findAuditList" resultType="exhibition" parameterType="exhibition">
+		SELECT 
+			<include refid="allColumns"/>
+		FROM CMS_TB_EXHIBITION t1
+	  	WHERE del_flag = #{DEL_FLAG_NORMAL} and t1.status != 1
+	  		<if test="type != null">
+		  		AND TYPE = #{type}
+			</if>
+			<if test="channelId != null and channelId != ''">
+		  		AND ( CHANNEL_ID = #{channelId} or 
+		  				CHANNEL_ID in(select Id from CMS_TB_CLASSIFY t2 start with ID = #{channelId} connect by prior id = PARENT_ID)
+		  			)
+			</if>
+		  	<if test="title != null and title != ''">
+		  		AND TITLE LIKE 
+		  		<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+				<if test="dbName == 'mysql'">CONCAT('%', #{title}, '%')</if>
+			</if>
+			<if test="status != null and status != -1">
+		  		AND STATUS = #{status}
+			</if>
+			<if test="beginDate != null and beginDate != ''">
+				AND START_DATE <![CDATA[ >= #{beginDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND END_DATE <![CDATA[ <= #{endDate} ]]>
+			</if>
+		ORDER BY t1.status,t1.update_date DESC, t1.id DESC
+	</select>
+		
+		
+	<insert id="insert">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+	     	select SEQ_CMS_TB_EXHIBITION.nextval from dual
+	    </selectKey>
+    	insert into CMS_TB_EXHIBITION(
+    		ID,
+        	CREATE_BY,
+        	CREATE_DATE, 
+        	UPDATE_BY,
+        	UPDATE_DATE, 
+        	DEL_FLAG,
+	        CHANNEL_ID,TITLE,START_DATE,END_DATE,EXHIBITION_IMG,PAVILION_NAME,PROVINCE_ID,CITY_ID,ADDRESS,COUNTRY_ID,
+        	DESCRIPTION,HOST_COMPANY,OFFICIAL,HOLD_COMPANY,CONTACT,CONTACT_PHONE,OFFICE_PHONE,MAILBOX,FAX,
+        	QQ,CONTACT_ADDRESS,STATUS,TYPE
+        )
+    	values(
+    		#{id},
+    		#{createBy.id},  
+			#{createDate}, 
+			#{updateBy.id},  
+			#{updateDate}, 
+			#{DEL_FLAG_NORMAL},
+			#{channelId},#{title},#{startDate},#{endDate},#{exhibitionImg},#{pavilionName},#{provinceId},#{cityId},#{address},#{countryId},
+    		#{description},#{hostCompany},#{official},#{holdCompany},#{contact},#{contactPhone},#{officePhone},#{mailbox},#{fax},
+    		#{qq},#{contactAddress},#{status},#{type}
+    	)
+    </insert>
+    
+	<update id="update">
+    	update CMS_TB_EXHIBITION SET
+    		update_by = #{updateBy.id}, 
+			update_date = #{updateDate},
+			CHANNEL_ID = #{channelId},
+			TITLE = #{title},
+			START_DATE = #{startDate},
+			END_DATE = #{endDate},
+			EXHIBITION_IMG = #{exhibitionImg},
+			PAVILION_NAME = #{pavilionName},
+			COUNTRY_ID = #{countryId},
+			PROVINCE_ID = #{provinceId},
+			CITY_ID = #{cityId},
+			ADDRESS = #{address},
+			DESCRIPTION = #{description},
+			HOST_COMPANY = #{hostCompany},
+			OFFICIAL = #{official},
+			HOLD_COMPANY = #{holdCompany},
+			CONTACT = #{contact},
+			CONTACT_PHONE = #{contactPhone},
+			OFFICE_PHONE = #{officePhone},
+			MAILBOX = #{mailbox},
+			FAX = #{fax},
+			QQ = #{qq},
+			CONTACT_ADDRESS = #{contactAddress},
+			status = #{status}
+		WHERE id = #{id}
+    </update>
+	
+ 
+	<update id="delete">
+		UPDATE CMS_TB_EXHIBITION SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<update id="updateStatus" parameterType="java.util.Map">
+		UPDATE CMS_TB_EXHIBITION SET 
+			STATUS = #{status}
+			,update_date = sysdate
+			<if test="status == 3">
+				,RELEASE_DATE = sysdate
+			</if>
+		WHERE id in
+			<foreach item="id" index="index" collection="ids" open="(" separator="," close=")">  
+			 	#{id}
+			</foreach> 
+	</update>
+	
+	<select id="selectExhibitionTxt" resultType="java.lang.String">
+    	select 
+        	EXHIBITION_TXT
+        from CMS_TB_EXHIBITION_TXT
+        where EXHIBITION_ID = #{exhibitionId}
+	</select>
+	<insert id="insertExhibitionTxt" parameterType="java.util.Map">
+    	insert into CMS_TB_EXHIBITION_TXT(
+    		EXHIBITION_ID,
+        	EXHIBITION_TXT
+        )
+    	values(
+    		#{exhibitionId},
+    		#{exhibitionTxt}
+    	)
+	</insert>
+	<update id="updateExhibitionTxt" parameterType="java.util.Map">
+    	update CMS_TB_EXHIBITION_TXT SET
+    		EXHIBITION_TXT = #{exhibitionTxt}
+		WHERE EXHIBITION_ID = #{exhibitionId}
+    </update>
+</mapper>

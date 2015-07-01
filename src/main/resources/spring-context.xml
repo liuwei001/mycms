@@ -21,15 +21,15 @@
     <util:properties id="APP_PROP" location="classpath:syscfg.properties" local-override="true"/>
 	
 	<!-- 使用Annotation自动注册Bean，解决事物失效问题：在主容器中不扫描@Controller注解，在SpringMvc中只扫描@Controller注解。  -->
-	<context:component-scan base-package="com.qr.ecomm"><!-- base-package 如果多个，用“,”分隔 -->
+	<context:component-scan base-package="com.klht"><!-- base-package 如果多个，用“,”分隔 -->
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
  	<!-- MyBatis begin -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="typeAliasesPackage" value="com.qr.ecomm"/>
-        <property name="typeAliasesSuperType" value="com.qr.ecomm.common.persistence.BaseEntity"/>    
+        <property name="typeAliasesPackage" value="com.klht"/>
+        <property name="typeAliasesSuperType" value="com.klht.common.persistence.BaseEntity"/>    
         <property name="mapperLocations" >
 			<list>
 				<value>classpath:/mappings/**/*.xml</value>
@@ -42,40 +42,25 @@
     <!-- 扫描basePackage下所有以@MyBatisDao注解的接口 -->
     <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
-        <property name="basePackage" value="com.qr.ecomm"/>
-        <property name="annotationClass" value="com.qr.ecomm.common.persistence.annotation.MyBatisDao"/>
+        <property name="basePackage" value="com.klht"/>
+        <property name="annotationClass" value="com.klht.common.persistence.annotation.MyBatisDao"/>
     </bean>
         
     <!-- 需要用到别的Long类型作为id，扫描basePackage下所有以@LongMyBatisDao注解的接口 -->
     <bean id="longSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="typeAliasesPackage" value="com.qr.ecomm"/>
-        <property name="typeAliasesSuperType" value="com.qr.ecomm.common.persistence.longid.LBaseEntity"/>
+        <property name="typeAliasesPackage" value="com.klht"/>
+        <property name="typeAliasesSuperType" value="com.klht.common.persistence.longid.LBaseEntity"/>
         <property name="mapperLocations" value="classpath*:/longmappings/**/*.xml"/>
 		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
     </bean>
 
     <bean id="longMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="sqlSessionFactoryBeanName" value="longSqlSessionFactory" />
-        <property name="basePackage" value="com.qr.ecomm"/>
-        <property name="annotationClass" value="com.qr.ecomm.common.persistence.annotation.LongMyBatisDao"/>
+        <property name="basePackage" value="com.klht"/>
+        <property name="annotationClass" value="com.klht.common.persistence.annotation.LongMyBatisDao"/>
     </bean>
-    
-     <!-- 需要用到别的类型作为id，可以放开 扫描basePackage下所有以@GenericMyBatisDao注解的接口 
-    <bean id="genericSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="typeAliasesPackage" value="com.qr.ecomm"/>
-        <property name="typeAliasesSuperType" value="com.qr.ecomm.common.persistence.generic.EBaseEntity"/>
-        <property name="mapperLocations" value="classpath*:/genericmappings/**/*.xml"/>
-		<property name="configLocation" value="classpath:/mybatis-config.xml"></property>
-    </bean>
-    
-    <bean id="genericMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="sqlSessionFactoryBeanName" value="genericSqlSessionFactory" />
-        <property name="basePackage" value="com.qr.ecomm"/>
-        <property name="annotationClass" value="com.qr.ecomm.common.persistence.annotation.GenericMyBatisDao"/>
-    </bean>
-    -->
+
     <!-- 定义事务 -->
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />

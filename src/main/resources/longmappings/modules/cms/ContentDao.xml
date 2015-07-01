@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.klht.modules.cms.dao.ContentDao">
+    
+	<sql id="allColumns">
+        ID,
+        CREATE_BY AS "createBy.id",
+        CREATE_DATE, 
+        UPDATE_BY AS "updateBy.id",
+        UPDATE_DATE,
+        DEL_FLAG,
+        REMARKS,
+        CHANNEL_ID,EXT_CHNL_ID,TITLE,AUTHOR,ORIGIN,ORIGIN_URL,DESCRIPTION,RELEASE_DATE,
+        TITLE_IMG,STATUS,TAGS,KEYWORDS,TYPE,SHORT_TITLE,IS_RECOMMAND
+    </sql>
+	
+	<!-- 根据编号获得用户 -->
+	<select id="get" resultType="content">
+		SELECT
+			<include refid="allColumns"/>
+		FROM CMS_TB_CONTENT
+		WHERE id = #{id}
+	</select>
+	
+    
+	<select id="findList" resultType="content" parameterType="content">
+		SELECT 
+			<include refid="allColumns"/>
+		FROM CMS_TB_CONTENT t1
+	  	WHERE del_flag = #{DEL_FLAG_NORMAL} and CHANNEL_ID != '-1'
+	  		<if test="type == null or type == 0">
+		  		AND CHANNEL_ID != 0
+			</if>
+			<if test="type != null and type == 1">
+		  		AND type = 1
+			</if>
+			<if test="channelId != null and channelId != ''">
+		  		AND ( CHANNEL_ID = #{channelId} or 
+		  				CHANNEL_ID in(select Id from CMS_TB_CLASSIFY t2 start with ID = #{channelId} connect by prior id = PARENT_ID)
+		  			)
+			</if>
+		  	<if test="title != null and title != ''">
+		  		<!-- AND regexp_like(TITLE, #{title}) -->
+ 		  		AND TITLE LIKE
+ 		  		<if test="dbName == 'oracle'">'%'||#{title}||'%'</if> 
+ 				<if test="dbName == 'mysql'">CONCAT('%', #{title}, '%')</if> 
+			</if>
+			<if test="status != null and status != -1">
+		  		AND STATUS = #{status}
+			</if>
+			<if test="beginDate != null and beginDate != ''">
+				AND CREATE_DATE <![CDATA[ >= #{beginDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND CREATE_DATE <![CDATA[ <= #{endDate} ]]>
+			</if>
+		ORDER BY decode(t1.status,1,1,4,2,2,3,3,4,5,5),t1.update_date DESC, t1.id DESC
+	</select>
+	<select id="findAuditList" resultType="content" parameterType="content">
+		SELECT 
+			<include refid="allColumns"/>
+		FROM CMS_TB_CONTENT t1
+	  	WHERE del_flag = #{DEL_FLAG_NORMAL} and CHANNEL_ID != '-1'  AND CHANNEL_ID != 0 and status != 1
+			<if test="channelId != null and channelId != ''">
+		  		AND ( CHANNEL_ID = #{channelId} or 
+		  				CHANNEL_ID in(select Id from CMS_TB_CLASSIFY t2 start with ID = #{channelId} connect by prior id = PARENT_ID)
+		  			)
+			</if>
+		  	<if test="title != null and title != ''">
+		  		<!-- AND regexp_like(TITLE, #{title})  -->
+		  		AND TITLE LIKE  
+ 		  		<if test="dbName == 'oracle'">'%'||#{title}||'%'</if> 
+ 				<if test="dbName == 'mysql'">CONCAT('%', #{title}, '%')</if> 
+			</if>
+			<if test="status != null and status != -1">
+		  		AND STATUS = #{status}
+			</if>
+			<if test="beginDate != null and beginDate != ''">
+				AND CREATE_DATE <![CDATA[ >= #{beginDate} ]]>
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND CREATE_DATE <![CDATA[ <= #{endDate} ]]>
+			</if>
+			ORDER BY t1.status,t1.update_date DESC, t1.id DESC
+	</select>
+		
+		
+	<insert id="insert">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+	     	select SEQ_CMS_TB_CONTENT.nextval from dual
+	    </selectKey>
+    	insert into CMS_TB_CONTENT(
+    		ID,
+        	CREATE_BY,
+        	CREATE_DATE, 
+        	UPDATE_BY,
+        	UPDATE_DATE, 
+        	DEL_FLAG,
+        	REMARKS,
+	        CHANNEL_ID,EXT_CHNL_ID,TITLE,AUTHOR,ORIGIN,ORIGIN_URL,DESCRIPTION,RELEASE_DATE,
+	        TITLE_IMG,STATUS,TAGS,KEYWORDS,TYPE,SHORT_TITLE,IS_RECOMMAND
+        )
+    	values(
+    		#{id},
+    		#{createBy.id},  
+			#{createDate}, 
+			#{updateBy.id},  
+			#{updateDate}, 
+			#{DEL_FLAG_NORMAL},
+			#{remarks},
+			#{channelId},#{extChnlId},#{title},#{author},#{origin},#{originUrl},#{description},#{releaseDate},
+    		#{titleImg},#{status},#{tags},#{keywords},#{type},#{shortTitle},#{isRecommand}
+    	)
+    </insert>
+    
+	<update id="update">
+    	update CMS_TB_CONTENT SET
+    		update_by = #{updateBy.id}, 
+			update_date = #{updateDate},
+			EXT_CHNL_ID = #{extChnlId},
+			title = #{title},
+			CHANNEL_ID = #{channelId},
+			TITLE_IMG = #{titleImg},
+			DESCRIPTION = #{description},
+			AUTHOR = #{author},
+			ORIGIN = #{origin},
+			ORIGIN_URL = #{originUrl},
+			STATUS = #{status},
+			TAGS = #{tags},
+			SHORT_TITLE = #{shortTitle},
+			IS_RECOMMAND = #{isRecommand}
+		WHERE id = #{id}
+    </update>
+	
+ 
+	<update id="delete">
+		UPDATE CMS_TB_CONTENT SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE id = #{id}
+	</update>
+	<update id="updateStatus" parameterType="java.util.Map">
+		UPDATE CMS_TB_CONTENT SET 
+			STATUS = #{status}
+			,update_date = sysdate
+			<if test="status == 3">
+				,RELEASE_DATE = sysdate
+			</if>
+		WHERE id in
+			<foreach item="id" index="index" collection="ids" open="(" separator="," close=")">  
+			 	#{id}
+			</foreach> 
+	</update>
+	
+	<select id="selectContentTxt" resultType="com.klht.modules.cms.entity.ContentTxt">
+    	select CONTENT_ID,
+        	CONTENT_TXT,
+        	USER_DEF1, 
+        	USER_DEF2,
+        	USER_DEF3
+        from CMS_TB_CONTENT_TXT
+        where CONTENT_ID = #{contentId}
+	</select>
+	<insert id="insertContentTxt" parameterType="com.klht.modules.cms.entity.ContentTxt">
+    	insert into CMS_TB_CONTENT_TXT(
+    		CONTENT_ID,
+        	CONTENT_TXT,
+        	USER_DEF1, 
+        	USER_DEF2,
+        	USER_DEF3
+        )
+    	values(
+    		#{contentId},
+    		#{contentTxt},  
+			#{userDef1}, 
+			#{userDef2},
+			#{userDef3}
+    	)
+	</insert>
+	<update id="updateContentTxt" parameterType="com.klht.modules.cms.entity.ContentTxt">
+    	update CMS_TB_CONTENT_TXT SET
+    		CONTENT_TXT = #{contentTxt}, 
+			USER_DEF1 = #{userDef1},
+			USER_DEF2 = #{userDef2},
+			USER_DEF3 = #{userDef3}
+		WHERE CONTENT_ID = #{contentId}
+    </update>
+    
+    <select id="selectTag" resultType="com.klht.modules.cms.entity.Tag">
+    	select ID,TAG_NAME
+        from CMS_TB_TAG
+        where TAG_NAME = #{tagName}
+	</select>
+	<insert id="insertTag" parameterType="com.klht.modules.cms.entity.Tag">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+	     	select SEQ_CMS_TB_TAG.nextval from dual
+	    </selectKey>
+    	insert into CMS_TB_TAG(
+    		ID,
+        	TAG_NAME
+        )
+    	values(
+    		#{id},
+    		#{tagName}
+    	)
+	</insert>
+	<delete id="deleteContentTag">
+		delete from CMS_TB_CONTENT_TAG
+		where CONTENT_ID = #{contentId}
+	</delete>
+	<insert id="insertContentTag" parameterType="java.util.Map">
+    	insert into CMS_TB_CONTENT_TAG(
+    		CONTENT_ID,
+        	TAG_ID
+        )
+		select #{contentId}, ID from CMS_TB_TAG
+		where ID in 
+			<foreach item="tagId" index="index" collection="tagIds" open="(" separator="," close=")">  
+			 	#{tagId}
+			</foreach> 
+	</insert>
+	
+	<select id="selectImportNews" resultType="com.klht.modules.cms.vo.ImportNewsVO">
+		select t1.ID, t1.CHANNEL_ID as classifyid, t2.name as classifyname,
+			t1.title, t1.author, t3.content_txt as contenttxt,
+			to_char(t1.release_date,'yyyy-mm-dd hh24:mi:ss') as releasedatestr,
+			(select views from CMS_TB_CONTENT_COUNT t4 where t4.content_id = t1.id) as views
+		from CMS_TB_CONTENT t1, CMS_TB_CLASSIFY t2, CMS_TB_CONTENT_TXT t3
+		where t1.CHANNEL_ID = t2.ID and t1.ID = t3.CONTENT_ID and status = 3
+		<choose>
+			<when test="dateType != null and dateType == 'second'">
+				and t1.release_date >= sysdate-numtodsinterval(#{dateNum},'second')
+			</when>
+			<when test="dateType != null and dateType == 'minute'">
+				and t1.release_date >= sysdate-numtodsinterval(#{dateNum},'minute')
+			</when>
+			<when test="dateType != null and dateType == 'hour'">
+				and t1.release_date >= sysdate-numtodsinterval(#{dateNum},'hour')
+			</when>
+			<when test="dateType != null and dateType == 'day'">
+				and t1.release_date >= sysdate - #{dateNum}
+			</when>
+			<when test="dateType != null and dateType == 'month'">
+				and t1.release_date >= add_months(sysdate,0 - #{dateNum})
+			</when>
+			<when test="dateType != null and dateType == 'year'">
+				and t1.release_date >= add_months(sysdate,0 - #{dateNum} * 12)
+			</when>
+			<when test="dateType != null">
+				and 1 = 0
+			</when>
+		</choose>
+	</select>
+	
+	<select id="selectNewsViews" resultType="com.klht.modules.cms.vo.ContentViewVO">
+		select t1.id, t2.views
+		from CMS_TB_CONTENT t1,CMS_TB_CONTENT_COUNT t2
+		where t1.id = t2.CONTENT_ID
+	</select>
+
+</mapper>

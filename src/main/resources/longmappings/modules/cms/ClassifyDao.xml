@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.klht.modules.cms.dao.ClassifyDao">
+    
+	<sql id="allColumns">
+        ID,
+        CREATE_BY AS "createBy.id",
+        CREATE_DATE, 
+        UPDATE_BY AS "updateBy.id",
+        UPDATE_DATE,
+        DEL_FLAG,
+        REMARKS,
+        PARENT_ID,
+        NAME,TYPE,KEYWORDS,IS_SHOW,SORT,CODE,PATH_NAME,PATH_ID
+    </sql>
+	
+	<!-- 根据编号获得用户 -->
+	<select id="get" resultType="classify">
+		SELECT
+			<include refid="allColumns"/>,
+			(select NAME from CMS_TB_CLASSIFY t2 where t1.PARENT_ID = t2.ID) as parentName
+		FROM CMS_TB_CLASSIFY t1
+		WHERE id = #{id}
+	</select>
+	
+    
+	<select id="findList" resultType="classify" parameterType="classify">
+		SELECT 
+			<include refid="allColumns"/>
+		FROM CMS_TB_CLASSIFY
+	  	WHERE del_flag = #{DEL_FLAG_NORMAL} AND type = #{type}
+		  	<if test="code != null and code != ''">
+				<![CDATA[ and code = #{code} ]]>
+			</if>
+			<if test="name != null and name != ''">
+				<![CDATA[ and name = #{name} ]]>
+			</if>
+		order by parent_id,SORT
+	</select>
+		
+		
+	<insert id="insert">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+	     	SELECT @@IDENTITY AS id
+	    </selectKey>
+    	insert into CMS_TB_CLASSIFY(
+	    	ID,
+	        CREATE_BY,
+	        CREATE_DATE, 
+	        UPDATE_BY,
+	        UPDATE_DATE,
+	        DEL_FLAG,
+	        REMARKS,
+	        PARENT_ID,
+	        NAME,TYPE,KEYWORDS,IS_SHOW,SORT,PATH_ID,PATH_NAME,CODE
+		)
+    	values(
+    		#{id},
+    		#{createBy.id},  
+			#{createDate}, 
+			#{updateBy.id},
+			#{updateDate}, 
+			#{delFlag},
+			#{remarks},
+			#{parentId},
+			#{name},#{type},#{keywords},
+    		#{isShow},#{sort},#{pathId},#{pathName},#{code}
+    	)
+    </insert>
+	
+	<update id="update">
+    	update CMS_TB_CLASSIFY SET
+    		update_by = #{updateBy.id}, 
+			update_date = #{updateDate},
+			PARENT_ID = #{parentId},
+			NAME = #{name},
+			KEYWORDS = #{keywords},
+			IS_SHOW = #{isShow},
+			SORT = #{sort},
+			PATH_ID = #{pathId},
+			PATH_NAME = #{pathName},
+			REMARKS = #{remarks},
+			CODE = #{code}
+		WHERE id = #{id}
+    </update>
+	
+ 
+	<update id="delete">
+		UPDATE CMS_TB_CLASSIFY SET 
+			del_flag = #{DEL_FLAG_DELETE}
+		WHERE ID = #{id} OR parent_ids LIKE 
+					<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
+					<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
+		
+	</update>
+	
+	<update id="updateSort" parameterType="java.util.Map">
+		UPDATE CMS_TB_CLASSIFY SET
+			sort = #{sort}
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findClassifyList" resultType="com.klht.modules.cms.vo.TreeVO">
+		SELECT 
+			ID,NAME,PARENT_ID
+		FROM CMS_TB_CLASSIFY t1
+	  	WHERE del_flag = 0 and type = #{type}
+	  	order by PARENT_ID,SORT
+	</select>
+	<select id="findClassify" resultType="com.klht.modules.cms.vo.TreeVO">
+		SELECT 
+			ID,NAME,PARENT_ID
+		FROM CMS_TB_CLASSIFY t1
+	  	WHERE del_flag = 0
+	  	 and ID = #{id}
+	</select>
+	
+	<update id="deleteContent">
+		UPDATE CMS_TB_CONTENT SET 
+			del_flag = 1
+		WHERE CHANNEL_ID in(select ID from CMS_TB_CLASSIFY start with id = #{id} connect by prior ID = PARENT_ID)
+	</update>
+	<update id="deleteExhibition">
+		UPDATE CMS_TB_EXHIBITION SET 
+			del_flag = 1
+		WHERE CHANNEL_ID in(select ID from CMS_TB_CLASSIFY start with id = #{id} connect by prior ID = PARENT_ID)
+	</update>
+	<update id="deleteTopic">
+		UPDATE CMS_TB_TOPIC SET 
+			del_flag = 1
+		WHERE TOPIC_CHNL_ID in(select ID from CMS_TB_CLASSIFY start with id = #{id} connect by prior ID = PARENT_ID)
+	</update>
+	<update id="deleteAdvert">
+		UPDATE CMS_TB_ADVERT SET 
+			del_flag = 1
+		WHERE AD_TYPE_ID in(select ID from CMS_TB_CLASSIFY start with id = #{id} connect by prior ID = PARENT_ID)
+	</update>
+	<update id="deleteAdPlace">
+		UPDATE CMS_TB_AD_PLACE SET 
+			del_flag = 1
+		WHERE AD_TYPE_ID in(select ID from CMS_TB_CLASSIFY start with id = #{id} connect by prior ID = PARENT_ID)
+	</update>
+
+</mapper>
