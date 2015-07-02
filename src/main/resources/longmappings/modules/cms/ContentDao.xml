@@ -35,9 +35,10 @@
 		  		AND type = 1
 			</if>
 			<if test="channelId != null and channelId != ''">
-		  		AND ( CHANNEL_ID = #{channelId} or 
+		  		<!-- AND ( CHANNEL_ID = #{channelId} or 
 		  				CHANNEL_ID in(select Id from CMS_TB_CLASSIFY t2 start with ID = #{channelId} connect by prior id = PARENT_ID)
-		  			)
+		  			) -->
+		  			AND  CHANNEL_ID = #{channelId}
 			</if>
 		  	<if test="title != null and title != ''">
 		  		<!-- AND regexp_like(TITLE, #{title}) -->
@@ -54,7 +55,8 @@
 			<if test="endDate != null and endDate != ''">
 				AND CREATE_DATE <![CDATA[ <= #{endDate} ]]>
 			</if>
-		ORDER BY decode(t1.status,1,1,4,2,2,3,3,4,5,5),t1.update_date DESC, t1.id DESC
+		<!-- ORDER BY decode(t1.status,1,1,4,2,2,3,3,4,5,5),t1.update_date DESC, t1.id DESC -->
+			ORDER BY t1.update_date DESC, t1.id DESC
 	</select>
 	<select id="findAuditList" resultType="content" parameterType="content">
 		SELECT 
@@ -87,7 +89,7 @@
 		
 	<insert id="insert">
 		<selectKey keyProperty="id" resultType="long" order="BEFORE">
-	     	select SEQ_CMS_TB_CONTENT.nextval from dual
+	     	SELECT @@IDENTITY AS id
 	    </selectKey>
     	insert into CMS_TB_CONTENT(
     		ID,

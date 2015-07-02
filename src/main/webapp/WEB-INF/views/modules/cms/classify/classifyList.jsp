@@ -35,7 +35,7 @@
 				<form:options items="${fns:getDictList('cms_classify_type')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 			</form:select>
 			<input id="btnSubmit" class="btn btn-primary" type="submit" value="查询"/>&nbsp;&nbsp;
-	</form:form> --%>
+	</form:form>  --%>
 	<sys:message content="${message}"/>
 	<form id="listForm" method="post">
 		<table id="treeTable" class="table table-striped table-bordered table-condensed">

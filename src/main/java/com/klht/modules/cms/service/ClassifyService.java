@@ -47,18 +47,10 @@ public class ClassifyService extends LCrudService<ClassifyDao, Classify>{
 	@Transactional(readOnly = false)
 	public void delete(Classify classify){
 		super.delete(classify);
-		switch(classify.getType()){
+		/*switch(classify.getType()){
 			case Classify.TYPE_CONTENT:
 				dao.deleteContent(classify.getId()); break;
-			case Classify.TYPE_TOPIC:
-				dao.deleteTopic(classify.getId()); break;
-			case Classify.TYPE_EXHIBITION:
-				dao.deleteExhibition(classify.getId()); break;
-			case Classify.TYPE_ADVERT:
-				dao.deleteAdvert(classify.getId());
-				dao.deleteAdPlace(classify.getId());
-				break;
-		}
+		}*/
 	}
 	private void classifyPathIdAndName(Classify classify){
 		String id = "";

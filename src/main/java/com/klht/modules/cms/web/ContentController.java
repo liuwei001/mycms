@@ -1,6 +1,3 @@
-/* 
- * Copyright (c) 2015, QUANRONG E-COMMDERCE LTD. All rights reserved.
- */
 package com.klht.modules.cms.web;
 
 import java.util.List;
@@ -70,12 +67,13 @@ public class ContentController extends BaseController{
 	}
 	@RequiresPermissions("cms:content:view")
 	@RequestMapping(value = "list")
-	public String list(Content content,Long chanId, HttpServletRequest request, HttpServletResponse response, Model model) {
+	public String list(Content content,Long chanId,Long parentId, HttpServletRequest request, HttpServletResponse response, Model model) {
 		content.setChannelId(chanId);
 		content.setType(Content.TYPE_MAN);
 		Page<Content> page = contentService.findPage(new Page<Content>(request, response), content); 
         model.addAttribute("page", page);
         model.addAttribute("chanId", chanId);
+        model.addAttribute("parentId", parentId);
 		return "modules/cms/content/contentList";
 	}
 	@RequiresPermissions("cms:content:view")

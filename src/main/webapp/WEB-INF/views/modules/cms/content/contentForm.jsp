@@ -66,16 +66,15 @@
 				<label style="padding-top:3px;">${content.channelPathName }</label>
 			</div>
 		</div>
-		<div class="control-group">
+		<%-- <div class="control-group">
 			<label class="control-label">新闻辅类:</label>
 			<div class="controls">
 				<form:select path="extChnlId" class="input-xlarge">
 					<form:option value="">请选择</form:option>
 					<form:options items="${fns:getDictList('cms_content_extchnl')}" itemLabel="label" itemValue="value" htmlEscape="false"/>
 				</form:select>
-<!-- 				<span class="help-inline"><font color="red">*</font> </span> -->
 			</div>
-		</div>
+		</div> --%>
 		<div class="control-group">
 			<label class="control-label">新闻标题:</label>
 			<div class="controls">

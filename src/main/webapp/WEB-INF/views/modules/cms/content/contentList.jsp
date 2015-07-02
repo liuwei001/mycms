@@ -61,10 +61,10 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li class="active"><a href="${ctx}/cms/content/list?chanId=${chanId}">新闻列表</a></li>
-		<c:if test="${chanId != null && chanId > 10}">
-			<shiro:hasPermission name="cms:content:edit">
+		<c:if test="${parentId > 0}">
+			 <shiro:hasPermission name="cms:content:edit"> 
 				<li><a href="${ctx}/cms/content/form?chanId=${chanId}">新闻添加</a></li>
-			</shiro:hasPermission>
+			 </shiro:hasPermission> 
 		</c:if>
 	</ul>
 	<form:form id="searchForm" modelAttribute="content" action="${ctx}/cms/content/list?chanId=${chanId}" method="post" class="breadcrumb form-search">

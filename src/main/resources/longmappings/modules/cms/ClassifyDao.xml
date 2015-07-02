@@ -88,10 +88,8 @@
 	<update id="delete">
 		UPDATE CMS_TB_CLASSIFY SET 
 			del_flag = #{DEL_FLAG_DELETE}
-		WHERE ID = #{id} OR parent_ids LIKE 
-					<if test="dbName == 'oracle'">'%,'||#{id}||',%'</if>
-					<if test="dbName == 'mysql'">CONCAT('%,', #{id}, ',%')</if>
-		
+		WHERE ID in (SELECT A.ID from (SELECT TEMP.* FROM CMS_TB_CLASSIFY TEMP) A 
+		WHERE FIND_IN_SET(A.ID, queryChildrenClassify(#{id})))
 	</update>
 	
 	<update id="updateSort" parameterType="java.util.Map">
