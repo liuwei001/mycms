@@ -86,7 +86,7 @@ public class ContentController extends BaseController{
 	}
 	@RequiresPermissions("cms:content:view")
 	@RequestMapping(value = "form")
-	public String form(Content content,Long chanId, HttpServletRequest request, HttpServletResponse response, Model model) {
+	public String form(Content content,Long chanId,Long parentId, HttpServletRequest request, HttpServletResponse response, Model model) {
 		if(content.getId() == null && chanId == null) return "error";
 		if(content.getId() == null)
 			content.setChannelId(chanId);
@@ -98,6 +98,7 @@ public class ContentController extends BaseController{
 		}
 		model.addAttribute("content", content);
 		model.addAttribute("chanId",chanId);
+        model.addAttribute("parentId", parentId);
 		return "modules/cms/content/contentForm";
 	}
 	@RequiresPermissions("cms:content:view")
@@ -119,7 +120,7 @@ public class ContentController extends BaseController{
 	}
 	@RequiresPermissions("cms:content:edit")
 	@RequestMapping(value = "save")
-	public String save(Content content,Long chanId,String audit, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+	public String save(Content content,Long chanId,Long parentId,String audit, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 		if(StringUtils.isNotEmpty(audit) && "1".equals(audit))
 			content.setStatus(Content.STATUS_NOT_AUDIT);
 		else if(content.getStatus() == null)
@@ -129,13 +130,13 @@ public class ContentController extends BaseController{
 		String chanIds = "";
 		if(chanId != null) chanIds = chanId.toString();
 		if(content.getType() == 0)
-			return "redirect:" + adminPath + "/cms/content/list?chanId="+chanIds;
+			return "redirect:" + adminPath + "/cms/content/list?chanId="+chanIds+"&parentId=" + parentId;
 		else
 			return "redirect:" + adminPath + "/cms/content/spiderList";
 	}
 	@RequiresPermissions("cms:content:edit")
 	@RequestMapping(value = "delete")
-	public String delete(Long[] ids,Long chanId,Long type, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+	public String delete(Long[] ids,Long chanId,Long parentId,Long type, HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
 		if(ids != null && ids.length > 0){
 			for (Long id : ids) {
 				Content content = new Content();
@@ -147,7 +148,7 @@ public class ContentController extends BaseController{
 		String chanIds = "";
 		if(chanId != null) chanIds = chanId.toString();
 		if(type == 0)
-			return "redirect:" + adminPath + "/cms/content/list?chanId="+chanIds;
+			return "redirect:" + adminPath + "/cms/content/list?chanId="+chanIds+"&parentId=" + parentId;
 		else
 			return "redirect:" + adminPath + "/cms/content/spiderList";
 	}
@@ -222,7 +223,7 @@ public class ContentController extends BaseController{
 	}
 	@RequiresPermissions("cms:content:view")
 	@RequestMapping(value = "view")
-	public String view(Content content,Long chanId, HttpServletRequest request, HttpServletResponse response, Model model) {
+	public String view(Content content,Long chanId,Long parentId, HttpServletRequest request, HttpServletResponse response, Model model) {
 		if(content.getId() == null && chanId == null) return "error";
 		if(content.getId() == null)
 			content.setChannelId(chanId);
@@ -237,6 +238,7 @@ public class ContentController extends BaseController{
 					content.getContentTxt()));
 		}
 		model.addAttribute("content", content);
+        model.addAttribute("parentId", parentId);
 		return "modules/cms/content/contentView";
 	}
 }

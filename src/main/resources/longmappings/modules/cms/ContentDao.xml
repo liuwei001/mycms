@@ -88,9 +88,6 @@
 		
 		
 	<insert id="insert">
-		<selectKey keyProperty="id" resultType="long" order="BEFORE">
-	     	SELECT @@IDENTITY AS id
-	    </selectKey>
     	insert into CMS_TB_CONTENT(
     		ID,
         	CREATE_BY,
@@ -113,6 +110,9 @@
 			#{channelId},#{extChnlId},#{title},#{author},#{origin},#{originUrl},#{description},#{releaseDate},
     		#{titleImg},#{status},#{tags},#{keywords},#{type},#{shortTitle},#{isRecommand}
     	)
+    	<selectKey keyProperty="id" resultType="long" order="AFTER">
+	     	SELECT LAST_INSERT_ID() AS id
+	    </selectKey>
     </insert>
     
 	<update id="update">

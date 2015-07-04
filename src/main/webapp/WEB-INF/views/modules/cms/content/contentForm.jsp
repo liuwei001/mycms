@@ -52,9 +52,9 @@
 <body>
 	<ul class="nav nav-tabs">
 		<li><a href="${ctx}/cms/content/list?chanId=${chanId}">新闻列表</a></li>
-		<li class="active"><a href="${ctx}/cms/content/form?id=${content.id}&chanId=${chanId}">新闻<shiro:hasPermission name="cms:content:edit">${not empty content.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:content:edit">查看</shiro:lacksPermission></a></li>
+		<li class="active"><a href="${ctx}/cms/content/form?id=${content.id}&chanId=${chanId}&parentId=${parentId}">新闻<shiro:hasPermission name="cms:content:edit">${not empty content.id?'修改':'添加'}</shiro:hasPermission><shiro:lacksPermission name="cms:content:edit">查看</shiro:lacksPermission></a></li>
 	</ul><br/>
-	<form:form id="inputForm" modelAttribute="content" action="${ctx}/cms/content/save?chanId=${chanId}" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="content" action="${ctx}/cms/content/save?chanId=${chanId}&parentId=${parentId}" method="post" class="form-horizontal">
 		<form:hidden path="id"/>
 		<form:hidden path="channelId" value="${channelId }"/>
 		<form:hidden path="type" value="0"/>
@@ -145,7 +145,7 @@
 			<shiro:hasPermission name="cms:content:edit">
 				<input type="hidden" id="audit" name="audit" value="0"/>
 				<input id="btnSubmit" class="btn btn-primary" type="button" value="保 存" onclick="javascript:$('#audit').val('0');$('#inputForm').submit();"/>&nbsp;
-				<input id="btnAudit" class="btn btn-primary" type="button" value="送审" onclick="javascript:$('#audit').val('1');$('#inputForm').submit();"/>&nbsp;
+				<!-- <input id="btnAudit" class="btn btn-primary" type="button" value="送审" onclick="javascript:$('#audit').val('1');$('#inputForm').submit();"/>&nbsp; -->
 			</shiro:hasPermission>
 			<input id="btnView" class="btn btn-primary" type="button" value="预览" onclick="view()"/>
 			<input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
