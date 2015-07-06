@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.qr.ecomm.common.persistence.Page;
-import com.qr.ecomm.common.service.CrudService;
-import com.qr.ecomm.common.utils.StringUtils;
+import com.klht.common.persistence.Page;
+import com.klht.common.service.CrudService;
+import com.klht.common.utils.StringUtils;
 import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
 import ${packageName}.${moduleName}.dao<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Dao;
 <#list table.childList as c>

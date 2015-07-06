@@ -10,7 +10,7 @@ package ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModule
 import ${i};
 </#list>
 
-import com.qr.ecomm.common.persistence.DataEntity;
+import com.klht.common.persistence.DataEntity;
 
 /**
  * ${functionName}Entity

@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.qr.ecomm.common.config.Global;
-import com.qr.ecomm.common.persistence.Page;
-import com.qr.ecomm.common.web.BaseController;
-import com.qr.ecomm.common.utils.StringUtils;
+import com.klht.common.config.Global;
+import com.klht.common.persistence.Page;
+import com.klht.common.web.BaseController;
+import com.klht.common.utils.StringUtils;
 import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
 import ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Service;
 

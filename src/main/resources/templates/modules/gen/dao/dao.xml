@@ -6,8 +6,8 @@
 	<content><![CDATA[
 package ${packageName}.${moduleName}.dao<#if subModuleName != "">.${subModuleName}</#if>;
 
-import com.qr.ecomm.common.persistence.CrudDao;
-import com.qr.ecomm.common.persistence.annotation.MyBatisDao;
+import com.klht.common.persistence.CrudDao;
+import com.klht.common.persistence.annotation.MyBatisDao;
 import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
 
 /**
